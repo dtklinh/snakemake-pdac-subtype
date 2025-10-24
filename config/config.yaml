@@ -7,11 +7,13 @@ units: config/units.tsv
 
 ref:
   # Ensembl species name
-  species: saccharomyces_cerevisiae
+  #species: saccharomyces_cerevisiae
+  species: homo_sapiens
   # Ensembl release (make sure to take one where snpeff data is available, check 'snpEff databases' output)
   release: 100
   # Genome build
-  build: R64-1-1
+  #build: R64-1-1
+  build: GRCh38
 
 trimming:
   # If you activate trimming by setting this to `True`, this will trim adapters
