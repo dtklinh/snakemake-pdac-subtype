@@ -1,3 +1,4 @@
 data/*
 resources/*
 results/*
+ssh_connect.sh
