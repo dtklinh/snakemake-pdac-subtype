@@ -3,7 +3,7 @@ import glob
 import pandas as pd
 from snakemake.utils import validate
 
-validate(config, schema="../schemas/config.schema.yaml")
+validate(config, schema="../../schemas/config.schema.yaml")
 
 samples = (
     pd.read_csv(config["samples"], sep="\t", dtype={"sample_name": str})
@@ -34,14 +34,14 @@ def get_final_output():
     return final_output
 
 
-validate(samples, schema="../schemas/samples.schema.yaml")
+validate(samples, schema="../../schemas/samples.schema.yaml")
 
 units = (
     pd.read_csv(config["units"], sep="\t", dtype={"sample_name": str, "unit_name": str})
     .set_index(["sample_name", "unit_name"], drop=False)
     .sort_index()
 )
-validate(units, schema="../schemas/units.schema.yaml")
+validate(units, schema="../../schemas/units.schema.yaml")
 
 
 wildcard_constraints:
