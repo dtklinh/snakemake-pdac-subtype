@@ -16,11 +16,18 @@ configfile: "config/config.yaml"
 #validate(units, schema="schemas/units.schema.yaml")
 include: "rules/common.smk"
 include: "rules/ref.smk"
-#include: "rules/trim.smk"
-#include: "rules/qc.smk"
+include: "rules/trim.smk"
+include: "rules/qc.smk"
+include: "rules/align.smk"
 
 rule all:
     input:
         directory("resources/star_genome"),
         multiext("resources/genome.fasta", ".amb", ".ann", ".bwt", ".pac", ".sa"),
-        "resources/genome.fasta.fai"
+        "resources/genome.fasta.fai",
+        "results/trimmed/S1/S1-1_R1.fastq.gz",
+        "results/trimmed/S1/S1-1_R2.fastq.gz",
+        "results/trimmed/S2/S2-1_R1.fastq.gz",
+        "results/trimmed/S2/S2-1_R2.fastq.gz",
+        "results/star/S1-1/Aligned.sortedByCoord.out.bam",
+        "results/star/S2-1/Aligned.sortedByCoord.out.bam"
