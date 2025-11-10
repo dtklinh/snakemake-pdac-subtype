@@ -8,3 +8,4 @@ dependencies:
   - r-tidyverse =2.0.0
   - r-data.table =1.17.8
   - r-pheatmap =1.0.13
+  - r-ashr =2.2_63

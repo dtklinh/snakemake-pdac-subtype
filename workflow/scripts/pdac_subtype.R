@@ -11,6 +11,11 @@ library(data.table)
 library(tidyverse)
 library(dplyr)
 
+
+# load object
+load("./fitteds_public_2019-02-12.Rdata")
+source("purIST_function.R")
+
 Mx <- read.table(
   snakemake@input[["counts"]],
   header = TRUE,
@@ -53,3 +58,32 @@ CountTable_TPM_mini <- CountTable_TPM %>%
   rownames_to_column(var = "row_names") %>% 
   filter(row_names %in% biomarkers) %>% 
   column_to_rownames(var = "row_names")
+
+pred <- apply_classifier(data = CountTable_TPM_mini, classifier = classifs[[1]])
+
+fwrite(pred, file = snakemake@output[["out_pred"]], quote = F, sep = "\t", row.names = T, col.names = T)
+
+
+### heatmap
+df_colData <- data.frame(Subtype = pred$Subtype_graded)
+rownames(df_colData) <- rownames(pred)
+
+dds <- DESeqDataSetFromMatrix(countData = CountTable[biomarkers,], colData = df_colData, design = ~1)
+dds <- estimateSizeFactors(dds)
+normalized_counts <- counts(dds, normalized=TRUE)
+vds <- DESeq2::varianceStabilizingTransformation(assay(dds))
+img <- vds %>% 
+  pheatmap::pheatmap(show_colnames = T, show_rownames = T,
+                     scale = "row",
+                     #cutree_cols = 8,
+                     clustering_method = "complete",
+                     color = colorRampPalette(c("navy", "white", "firebrick3"))(50),
+                     annotation_col = df_colData,
+                     #annotation_colors = my_Anno_cols,
+                     cluster_cols = T, 
+                     angle_col = 315)
+
+ggsave(snakemake@output[["out_heatmap"]], img)
+#png("./img/p1713_pheatmap_pdac_subtype_2.png")
+#img
+#dev.off()
